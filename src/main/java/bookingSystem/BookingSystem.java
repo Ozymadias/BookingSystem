@@ -1,9 +1,16 @@
 package bookingSystem;
 
-public class BookingSystem {
-    private String bookedHours = "";
+import java.util.ArrayList;
+import java.util.List;
 
-    public String getBookedHours() {
+public class BookingSystem {
+    private List<Integer> bookedHours = new ArrayList<>();
+
+    public List<Integer> getBookedHours() {
         return bookedHours;
+    }
+
+    public void book(int i) {
+        bookedHours.add(i);
     }
 }
