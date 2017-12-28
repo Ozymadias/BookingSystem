@@ -44,9 +44,23 @@ public class BookingSystemTest {
         assertTrue(bookingSystem.getBookedHours().contains(hour));
     }
 
-    @Test(dataProvider = "booked", expectedExceptions = IllegalArgumentException.class)
+    @Test(dataProvider = "booked", expectedExceptions = HourAlreadyBookedException.class)
     public void nonHourCanBeDoubleBooked(int hour) {
         bookingSystem.book(hour);
         bookingSystem.book(hour);
+    }
+
+    @DataProvider
+    private static final Object[][] invalidInput() {
+        return new Object[][]{
+                {-1},
+                {25},
+                {24}
+        };
+    }
+
+    @Test(dataProvider = "invalidInput", expectedExceptions = IllegalArgumentException.class)
+    public void name(int invalid) {
+        bookingSystem.book(invalid);
     }
 }
