@@ -1,24 +1,28 @@
 package bookingSystem;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
+
 public class BookingSystemTest {
+    BookingSystem bookingSystem;
+
+    @BeforeMethod
+    private void setUp() {
+        bookingSystem = new BookingSystem();
+    }
 
     @Test
     public void newSystemShouldReturnEmptyListOfBookedHours() {
-        BookingSystem bookingSystem = new BookingSystem();
-
         assertTrue(bookingSystem.getBookedHours().isEmpty(), "List of booked hours should be empty after initialization");
     }
 
     @Test
     public void afterBookingListOfBookedHoursShouldBeNonEmpty() {
-        BookingSystem bookingSystem = new BookingSystem();
-
         bookingSystem.book(1);
 
         assertFalse(bookingSystem.getBookedHours().isEmpty(), "List of booked hours should not be empty after booking");
@@ -35,10 +39,14 @@ public class BookingSystemTest {
 
     @Test(dataProvider = "booked")
     public void afterBookingListOfBookedHoursShouldContainBookedHours(int hour) {
-        BookingSystem bookingSystem = new BookingSystem();
-        
         bookingSystem.book(hour);
 
         assertTrue(bookingSystem.getBookedHours().contains(hour));
+    }
+
+    @Test(dataProvider = "booked", expectedExceptions = IllegalArgumentException.class)
+    public void nonHourCanBeDoubleBooked(int hour) {
+        bookingSystem.book(hour);
+        bookingSystem.book(hour);
     }
 }

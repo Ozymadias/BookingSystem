@@ -11,6 +11,8 @@ public class BookingSystem {
     }
 
     public void book(int i) {
+        if (bookedHours.contains(i))
+            throw new IllegalArgumentException();
         bookedHours.add(i);
     }
 }
