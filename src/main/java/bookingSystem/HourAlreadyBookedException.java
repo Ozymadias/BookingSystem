@@ -1,4 +1,4 @@
 package bookingSystem;
 
-public class HourAlreadyBookedException extends IllegalArgumentException {
+class HourAlreadyBookedException extends IllegalArgumentException {
 }

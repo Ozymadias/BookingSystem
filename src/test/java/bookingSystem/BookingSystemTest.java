@@ -4,6 +4,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.time.DayOfWeek;
+
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -23,7 +25,7 @@ public class BookingSystemTest {
 
     @Test
     public void afterBookingListOfBookedHoursShouldBeNonEmpty() {
-        bookingSystem.book(1);
+        bookingSystem.book(DayOfWeek.MONDAY, 1);
 
         assertFalse(bookingSystem.getBookedHours().isEmpty(), "List of booked hours should not be empty after booking");
     }
@@ -31,36 +33,36 @@ public class BookingSystemTest {
     @DataProvider
     private static final Object[][] booked() {
         return new Object[][]{
-                {1},
-                {2},
-                {3}
+                {DayOfWeek.MONDAY, 1},
+                {DayOfWeek.MONDAY, 2},
+                {DayOfWeek.MONDAY, 3}
         };
     }
 
     @Test(dataProvider = "booked")
-    public void afterBookingListOfBookedHoursShouldContainBookedHours(int hour) {
-        bookingSystem.book(hour);
+    public void afterBookingListOfBookedHoursShouldContainBookedHours(DayOfWeek day, int hour) {
+        bookingSystem.book(day, hour);
 
-        assertTrue(bookingSystem.getBookedHours().contains(hour));
+        assertTrue(bookingSystem.getBookedHours().contains(new MyPair<>(day, hour)));
     }
 
     @Test(dataProvider = "booked", expectedExceptions = HourAlreadyBookedException.class)
-    public void nonHourCanBeDoubleBooked(int hour) {
-        bookingSystem.book(hour);
-        bookingSystem.book(hour);
+    public void nonHourCanBeDoubleBooked(DayOfWeek day, int hour) {
+        bookingSystem.book(day, hour);
+        bookingSystem.book(day, hour);
     }
 
     @DataProvider
-    private static final Object[][] invalidInput() {
+    private static final Object[][] invalidHours() {
         return new Object[][]{
-                {-1},
-                {25},
-                {24}
+                {DayOfWeek.MONDAY, -1},
+                {DayOfWeek.MONDAY, 25},
+                {DayOfWeek.MONDAY, 24}
         };
     }
 
-    @Test(dataProvider = "invalidInput", expectedExceptions = IllegalArgumentException.class)
-    public void name(int invalid) {
-        bookingSystem.book(invalid);
+    @Test(dataProvider = "invalidHours", expectedExceptions = IllegalArgumentException.class)
+    public void whenMethodIsCalledWithInvalidHourShouldThrowException(DayOfWeek day, int invalid) {
+        bookingSystem.book(day, invalid);
     }
 }
