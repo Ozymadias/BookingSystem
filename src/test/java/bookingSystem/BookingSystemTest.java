@@ -65,4 +65,9 @@ public class BookingSystemTest {
     public void whenMethodIsCalledWithInvalidHourShouldThrowException(DayOfWeek day, int invalid) {
         bookingSystem.book(day, invalid);
     }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void whenMethodIsCalledWithInvalidDayShouldThrowException() {
+        bookingSystem.book(null, 1);
+    }
 }

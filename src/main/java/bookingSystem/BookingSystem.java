@@ -12,7 +12,7 @@ class BookingSystem {
     }
 
     void book(DayOfWeek day, int i) {
-        if (!(0 <= i && i < 24))
+        if (!(0 <= i && i < 24) || day == null)
             throw new IllegalArgumentException();
         MyPair<DayOfWeek, Integer> pair = new MyPair<>(day, i);
         if (bookedHours.contains(pair))
