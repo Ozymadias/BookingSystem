@@ -1,4 +1,4 @@
-package bookingSystem;
+package bookingsystem;
 
 class MyPair<T, T1> {
     private final T day;

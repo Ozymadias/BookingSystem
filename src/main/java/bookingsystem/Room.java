@@ -1,4 +1,4 @@
-package bookingSystem;
+package bookingsystem;
 
 import java.time.DayOfWeek;
 import java.util.List;

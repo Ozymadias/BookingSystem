@@ -1,4 +1,4 @@
-package bookingSystem;
+package bookingsystem;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -31,7 +31,7 @@ public class BookingSystemTest {
     }
 
     @DataProvider
-    private static final Object[][] booked() {
+    private static Object[][] booked() {
         return new Object[][]{
                 {DayOfWeek.MONDAY, 1},
                 {DayOfWeek.MONDAY, 2},
@@ -53,7 +53,7 @@ public class BookingSystemTest {
     }
 
     @DataProvider
-    private static final Object[][] invalidHours() {
+    private static Object[][] invalidHours() {
         return new Object[][]{
                 {DayOfWeek.MONDAY, -1},
                 {DayOfWeek.MONDAY, 25},
