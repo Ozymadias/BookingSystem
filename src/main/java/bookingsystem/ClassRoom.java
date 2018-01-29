@@ -5,6 +5,11 @@ import java.util.List;
 
 class ClassRoom implements Room {
     private List<TimeSlot> availableHours = ScheduleGenerator.generateWeek();
+    private int id;
+
+    ClassRoom(int id) {
+        this.id = id;
+    }
 
     @Override
     public boolean isAvailable(TimeSlot timeSlot) {

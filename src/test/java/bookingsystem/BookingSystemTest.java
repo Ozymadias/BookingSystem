@@ -6,31 +6,33 @@ import org.testng.annotations.Test;
 
 import java.time.DayOfWeek;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 
 public class BookingSystemTest {
     BookingSystem bookingSystem;
     private int anyHour = 1;
     private DayOfWeek anyDay = DayOfWeek.MONDAY;
+    private int id = 1;
+    private int numberOfAllRooms;
 
     @BeforeMethod
     private void setUp() {
         bookingSystem = new BookingSystem();
+        numberOfAllRooms = bookingSystem.numberOfRooms();
     }
 
     @Test
-    public void newSystemShouldReturnEmptyListOfBookedHours() {
-        assertEquals(bookingSystem.getAvailableRooms(anyDay, anyHour).size(), 1,
+    public void newSystemShouldHaveAllItsRoomAvailable() {
+        assertEquals(bookingSystem.getAvailableRooms(anyDay, anyHour).size(), numberOfAllRooms,
                 "All rooms should be available after initialization");
     }
 
     @Test
-    public void afterBookingListOfBookedHoursShouldBeNonEmpty() {
-        bookingSystem.book(anyDay, anyHour);
+    public void afterBookingListOfAvailableRoomsShouldNotBeFull() {
+        bookingSystem.book(id, anyDay, anyHour);
 
-        assertEquals(bookingSystem.getAvailableRooms(anyDay, anyHour).size(), 0,
+        assertNotEquals(bookingSystem.getAvailableRooms(anyDay, anyHour).size(), numberOfAllRooms,
                 "List of available rooms should not contain room after booking it");
     }
 
@@ -44,16 +46,16 @@ public class BookingSystemTest {
     }
 
     @Test(dataProvider = "booked")
-    public void afterBookingListOfBookedHoursShouldContainBookedHours(DayOfWeek day, int hour) {
-        bookingSystem.book(day, hour);
+    public void afterBookingListOfAvailableShouldNotContainBookedRoom(DayOfWeek day, int hour) {
+        bookingSystem.book(id, day, hour);
 
-        assertTrue(bookingSystem.getAvailableRooms(day, hour).isEmpty());
+        assertEquals(bookingSystem.getAvailableRooms(day, hour).size(), numberOfAllRooms - 1);
     }
 
     @Test(dataProvider = "booked", expectedExceptions = HourAlreadyBookedException.class)
     public void nonHourCanBeDoubleBooked(DayOfWeek day, int hour) {
-        bookingSystem.book(day, hour);
-        bookingSystem.book(day, hour);
+        bookingSystem.book(id, day, hour);
+        bookingSystem.book(id, day, hour);
     }
 
     @DataProvider
@@ -67,11 +69,11 @@ public class BookingSystemTest {
 
     @Test(dataProvider = "invalidHours", expectedExceptions = IllegalArgumentException.class)
     public void whenMethodIsCalledWithInvalidHourShouldThrowException(DayOfWeek day, int invalid) {
-        bookingSystem.book(day, invalid);
+        bookingSystem.book(id, day, invalid);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void whenMethodIsCalledWithInvalidDayShouldThrowException() {
-        bookingSystem.book(null, 1);
+        bookingSystem.book(id, null, 1);
     }
 }
