@@ -1,22 +1,18 @@
 package bookingSystem;
 
 import java.time.DayOfWeek;
-import java.util.ArrayList;
 import java.util.List;
 
 class BookingSystem {
-    private List<MyPair<DayOfWeek, Integer>> bookedHours = new ArrayList<>();
+    private Room classRoom = new ClassRoom();
 
     List<MyPair<DayOfWeek, Integer>> getBookedHours() {
-        return bookedHours;
+        return classRoom.getBookedHours();
     }
 
     void book(DayOfWeek day, int i) {
         if (!(0 <= i && i < 24) || day == null)
             throw new IllegalArgumentException();
-        MyPair<DayOfWeek, Integer> pair = new MyPair<>(day, i);
-        if (bookedHours.contains(pair))
-            throw new HourAlreadyBookedException();
-        bookedHours.add(pair);
+        classRoom.book(day, i);
     }
 }
