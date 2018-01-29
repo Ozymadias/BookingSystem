@@ -28,10 +28,6 @@ class BookingSystem {
         return classRoom.values().stream().filter(room -> room.isAvailable(new TimeSlot(day, hour))).collect(Collectors.toList());
     }
 
-    int numberOfRooms() {
-        return classRoom.size();
-    }
-
     List<Room> getAllRooms() {
         return allRooms;
     }

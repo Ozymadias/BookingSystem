@@ -23,4 +23,19 @@ class ClassRoom implements Room {
             throw new HourAlreadyBookedException();
         availableHours.remove(pair);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ClassRoom classRoom = (ClassRoom) o;
+
+        return id == classRoom.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
 }

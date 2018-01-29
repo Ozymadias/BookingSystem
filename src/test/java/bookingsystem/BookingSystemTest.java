@@ -6,7 +6,8 @@ import org.testng.annotations.Test;
 
 import java.time.DayOfWeek;
 
-import static org.testng.Assert.*;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.testng.Assert.assertEquals;
 
 
 public class BookingSystemTest {
@@ -14,12 +15,10 @@ public class BookingSystemTest {
     private int anyHour = 1;
     private DayOfWeek anyDay = DayOfWeek.MONDAY;
     private int id = 1;
-    private int numberOfAllRooms;
 
     @BeforeMethod
     private void setUp() {
         bookingSystem = new BookingSystem();
-        numberOfAllRooms = bookingSystem.numberOfRooms();
     }
 
     @Test
@@ -29,11 +28,20 @@ public class BookingSystemTest {
     }
 
     @Test
-    public void afterBookingListOfAvailableRoomsShouldNotBeFull() {
+    public void afterBookingListOfAvailableRoomsShouldNotContainsBookedRoom() {
+        bookingSystem.book(id, anyDay, anyHour);
+        Room bookedRoom = new ClassRoom(id);
+
+        assertThat(bookingSystem.getAvailableRooms(anyDay, anyHour)).excludes(bookedRoom);
+    }
+
+    @Test
+    public void afterBookingListOfAvailableRoomsShouldContainsNotBookedRoom() {
+        Room unbooked = new ClassRoom(2);
+
         bookingSystem.book(id, anyDay, anyHour);
 
-        assertNotEquals(bookingSystem.getAvailableRooms(anyDay, anyHour).size(), numberOfAllRooms,
-                "List of available rooms should not contain room after booking it");
+        assertThat(bookingSystem.getAvailableRooms(anyDay, anyHour)).contains(unbooked);
     }
 
     @DataProvider
@@ -48,8 +56,9 @@ public class BookingSystemTest {
     @Test(dataProvider = "booked")
     public void afterBookingListOfAvailableShouldNotContainBookedRoom(DayOfWeek day, int hour) {
         bookingSystem.book(id, day, hour);
+        Room bookedRoom = new ClassRoom(id);
 
-        assertEquals(bookingSystem.getAvailableRooms(day, hour).size(), numberOfAllRooms - 1);
+        assertThat(bookingSystem.getAvailableRooms(day, hour)).excludes(bookedRoom);
     }
 
     @Test(dataProvider = "booked", expectedExceptions = HourAlreadyBookedException.class)
