@@ -14,7 +14,10 @@ class BookingSystem {
     private List<Room> allRooms;
 
     BookingSystem() {
-        IntStream.range(1, endExclusive).forEach(id -> classRoom.put(id, new ClassRoom(id)));
+        IntStream.range(1, endExclusive).forEach(i -> {
+            classRoom.put(i, new ClassRoom(i, i));
+            classRoom.put(i + endExclusive, new ClassRoom(i + endExclusive, i, Equipment.PROJECTOR));
+        });
         allRooms = new ArrayList<>(classRoom.values());
     }
 
@@ -25,10 +28,21 @@ class BookingSystem {
     }
 
     List<Room> getAvailableRooms(DayOfWeek day, int hour) {
-        return classRoom.values().stream().filter(room -> room.isAvailable(new TimeSlot(day, hour))).collect(Collectors.toList());
+        return classRoom.values().stream()
+                .filter(room -> room.isAvailable(new TimeSlot(day, hour)))
+                .collect(Collectors.toList());
     }
 
     List<Room> getAllRooms() {
         return allRooms;
+    }
+
+    void book(int capacity, Equipment equipment, TimeSlot timeSlot) {
+        List<Room> properRooms = classRoom.values().stream()
+                .filter(room -> room.isAvailable(timeSlot))
+                .filter(room -> equipment.equals(room.getEquipments()))
+                .filter(room -> room.size() >= capacity)
+                .collect(Collectors.toList());
+        properRooms.get(0).book(timeSlot);
     }
 }

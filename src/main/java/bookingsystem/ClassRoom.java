@@ -6,9 +6,17 @@ import java.util.List;
 class ClassRoom implements Room {
     private List<TimeSlot> availableHours = ScheduleGenerator.generateWeek();
     private int id;
+    private int size;
+    private Equipment equipment;
 
-    ClassRoom(int id) {
+    ClassRoom(int id, int size) {
         this.id = id;
+        this.size = size;
+    }
+
+    ClassRoom(int id, int size, Equipment equipment) {
+        this(id, size);
+        this.equipment = equipment;
     }
 
     @Override
@@ -18,10 +26,24 @@ class ClassRoom implements Room {
 
     @Override
     public void book(DayOfWeek day, int i) {
-        TimeSlot pair = new TimeSlot(day, i);
-        if (!availableHours.contains(pair))
+        book(new TimeSlot(day, i));
+    }
+
+    @Override
+    public Equipment getEquipments() {
+        return equipment;
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public void book(TimeSlot timeSlot) {
+        if (!availableHours.contains(timeSlot))
             throw new HourAlreadyBookedException();
-        availableHours.remove(pair);
+        availableHours.remove(timeSlot);
     }
 
     @Override
