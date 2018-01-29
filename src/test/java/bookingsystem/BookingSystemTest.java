@@ -6,12 +6,14 @@ import org.testng.annotations.Test;
 
 import java.time.DayOfWeek;
 
-import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 
 public class BookingSystemTest {
     BookingSystem bookingSystem;
+    private int anyHour = 1;
+    private DayOfWeek anyDay = DayOfWeek.MONDAY;
 
     @BeforeMethod
     private void setUp() {
@@ -20,14 +22,16 @@ public class BookingSystemTest {
 
     @Test
     public void newSystemShouldReturnEmptyListOfBookedHours() {
-        assertTrue(bookingSystem.getBookedHours().isEmpty(), "List of booked hours should be empty after initialization");
+        assertEquals(bookingSystem.getAvailableRooms(anyDay, anyHour).size(), 1,
+                "All rooms should be available after initialization");
     }
 
     @Test
     public void afterBookingListOfBookedHoursShouldBeNonEmpty() {
-        bookingSystem.book(DayOfWeek.MONDAY, 1);
+        bookingSystem.book(anyDay, anyHour);
 
-        assertFalse(bookingSystem.getBookedHours().isEmpty(), "List of booked hours should not be empty after booking");
+        assertEquals(bookingSystem.getAvailableRooms(anyDay, anyHour).size(), 0,
+                "List of available rooms should not contain room after booking it");
     }
 
     @DataProvider
@@ -43,7 +47,7 @@ public class BookingSystemTest {
     public void afterBookingListOfBookedHoursShouldContainBookedHours(DayOfWeek day, int hour) {
         bookingSystem.book(day, hour);
 
-        assertTrue(bookingSystem.getBookedHours().contains(new MyPair<>(day, hour)));
+        assertTrue(bookingSystem.getAvailableRooms(day, hour).isEmpty());
     }
 
     @Test(dataProvider = "booked", expectedExceptions = HourAlreadyBookedException.class)
