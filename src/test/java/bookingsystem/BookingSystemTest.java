@@ -24,7 +24,7 @@ public class BookingSystemTest {
 
     @Test
     public void newSystemShouldHaveAllItsRoomAvailable() {
-        assertEquals(bookingSystem.getAvailableRooms(anyDay, anyHour).size(), numberOfAllRooms,
+        assertEquals(bookingSystem.getAvailableRooms(anyDay, anyHour), bookingSystem.getAllRooms(),
                 "All rooms should be available after initialization");
     }
 
